@@ -43,7 +43,7 @@ function doPost(e) {
      //しーと＋時刻べつに仕分けする    
     var sheet = doc.getSheetByName(sname);  
     var data =JSON_DATA.data;
-    if(data.match(/QUERY\('ミリシタカツドウ'/)){
+    if(data.match(/^=QUERY\('ミリシタカツドウ'.+,1\)$/)){
     sheet.getRange(1,1).setValue(data);
     
     var html =sddoGet();
@@ -51,7 +51,9 @@ function doPost(e) {
     }
     else{
     
-    return "qery関数+ミリシタカツドウシート以外はつかえません";          
+    return ContentService
+    .createTextOutput("qery関数+ミリシタカツドウシート以外はつかえません\r\n送信データ: "+ data + "\r\n"+JSON.stringify({"結果":"エラー", "エラー": e}))
+          .setMimeType(ContentService.MimeType.JSON);          
     }
     
   } catch(e){
